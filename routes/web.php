@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/cache_status', function () {
+    require('../vendor/amnuts/opcache-gui/index.php');
+});
+
