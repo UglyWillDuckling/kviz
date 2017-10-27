@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 
@@ -20,3 +20,7 @@ Route::get('/cache_status', function () {
     require('../vendor/amnuts/opcache-gui/index.php');
 });
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
