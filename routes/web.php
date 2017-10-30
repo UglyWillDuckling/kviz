@@ -11,10 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
-
 
 Route::get('/cache_status', function () {
     require('../vendor/amnuts/opcache-gui/index.php');
@@ -23,4 +19,17 @@ Route::get('/cache_status', function () {
 
 Auth::routes();
 
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/mailtest', function () {
+    return new App\Mail\Welcome();
+});
+
+
+Route::get('/edgeCase', function () {
+
+    //test the edge browser
+
+    return view('test.edge');
+});
