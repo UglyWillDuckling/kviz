@@ -16,6 +16,9 @@ window.Vue = require('vue');
  */
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('game-component', require('./components/GameComponent.vue'));
+Vue.component('messagebox-component', require('./components/MessageBoxComponent.vue'));
+Vue.component('players-component', require('./components/PlayersComponent.vue'));
 
 const app = new Vue({
     el: '#app'
