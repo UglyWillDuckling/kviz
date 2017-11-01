@@ -7,6 +7,8 @@
 
                     <div class="panel-body">
                         I am the only game you will ever need!
+
+                        <score :list="players"></score>
                     </div>
                 </div>
             </div>
@@ -19,14 +21,24 @@
     export default {
         data: function () {
             return {
-                players: {
+                players: [
                     //players currently in the game
-                    player1: {
-                        name: 'player1',
+                     {
+                        name: 'Doris',
                         avatar: 'image',
                         rank: '3'
-                    }
-                },
+                    },
+                    {
+                        name: 'Marko',
+                        avatar: '',
+                        rank: '2'
+                    },
+                    {
+                        name: 'Zoki',
+                        avatar: '',
+                        rank: '4'
+                    },
+                ],
 
                 question: {
                     //the current question
@@ -35,7 +47,7 @@
             }
         },
         components: {
-
+            score: require('./game/ScoreComponent.vue')
         },
 
         methods: {
