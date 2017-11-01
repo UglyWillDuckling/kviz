@@ -8,3 +8,4 @@
     <example-component></example-component>
 <!--the components for the game -->
 @endsection
+

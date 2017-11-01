@@ -42675,6 +42675,37 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _data$components$prop;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -42692,11 +42723,67 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component mounted.');
+/* harmony default export */ __webpack_exports__["default"] = (_data$components$prop = {
+    data: function data() {
+        return {
+            count: 0,
+            message: '',
+            points: 50,
+            first: 'Jeffrey',
+            last: 'Way',
+
+            plans: [{ name: 'Enterprise', price: 100 }, { name: 'Pro', price: 50 }, { name: 'Personal', price: 10 }, { name: 'Free', price: 0 }],
+            current: {}
+        };
+    },
+
+    components: {
+        plan: {
+            template: '\n                <div style="display: table;">\n                    <span>{{ plan.name }}</span>\n                    <span>{{ plan.price }}/month</span>\n                    <button v-if="current.name !== plan.name" @click="setcurrentPlan">{{ isUpgrade ? \'Upgrade\' : \'Downgrade\' }}</button>\n                    <span v-else="">Selected</span>\n                </div>\n                                ',
+            props: ['plan', 'current'],
+
+            computed: {
+                isUpgrade: function isUpgrade() {
+                    return this.plan.price > this.current.price;
+                }
+            },
+
+            methods: {
+                setcurrentPlan: function setcurrentPlan() {
+                    this.$emit('update:current', this.plan);
+                }
+            }
+        }
+    },
+
+    props: ['subject'],
+
+    computed: {
+        skill: function skill() {
+            if (this.points <= 100) {
+                return 'Noob';
+            }
+
+            return 'Advanced';
+        }
     }
-});
+
+}, _defineProperty(_data$components$prop, 'computed', {
+    fullName: function fullName() {
+        return this.first + ' ' + this.last;
+    }
+}), _defineProperty(_data$components$prop, 'methods', {
+    handleIt: function handleIt(e) {
+        alert('submitting the form.');
+    },
+    clicked: function clicked() {
+        alert('dont touch me!');
+    },
+
+    updateCount: function updateCount() {
+        this.count += 1;
+    }
+}), _data$components$prop);
 
 /***/ }),
 /* 41 */
@@ -42706,32 +42793,40 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" }, [
-              _vm._v(
-                "\n                    I'm an example component!\n                "
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading" }, [
+            _vm._v("Example Component")
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "panel-body" },
+            _vm._l(_vm.plans, function(plan) {
+              return _c(
+                "div",
+                [
+                  _c("plan", {
+                    attrs: { plan: plan, current: _vm.current },
+                    on: {
+                      "update:current": function($event) {
+                        _vm.current = $event
+                      }
+                    }
+                  })
+                ],
+                1
               )
-            ])
-          ])
+            })
+          )
         ])
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -42811,35 +42906,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    data: {
-        players: {
-            //players currently in the game
-            player1: {
-                name: 'player1',
-                avatar: 'image',
-                rank: '3'
+    data: function data() {
+        return {
+            players: {
+                //players currently in the game
+                player1: {
+                    name: 'player1',
+                    avatar: 'image',
+                    rank: '3'
+                }
+            },
+
+            question: {
+                //the current question
+
             }
+        };
+    },
+    components: {},
+
+    methods: {
+        loadNextQuestion: function loadNextQuestion() {
+            //get the next question from the server
+            this.replaceQuestion();
         },
-
-        question: {
-            //the current question
-
+        replaceQuestion: function replaceQuestion() {
+            //replace the current question, if there is one, with the new one
+            this.data.question = {};
         }
-    },
-
-    mounted: function mounted() {
-        console.log('Game Component mounted.');
-    },
-    loadNextQuestion: function loadNextQuestion() {
-        //get the next question from the server
-        this.replaceQuestion();
-    },
-    replaceQuestion: function replaceQuestion() {
-        //replace the current question, if there is one, with the new one
-        this.data.question = {};
     }
+
 });
 
 /***/ }),

@@ -12,36 +12,42 @@
             </div>
         </div>
     </div>
+
 </template>
 
 <script>
     export default {
-        data: {
-            players: {
-                //players currently in the game
-                player1: {
-                    name: 'player1',
-                    avatar: 'image',
-                    rank: '3'
-                }
+        data: function () {
+            return {
+                players: {
+                    //players currently in the game
+                    player1: {
+                        name: 'player1',
+                        avatar: 'image',
+                        rank: '3'
+                    }
+                },
+
+                question: {
+                    //the current question
+
+                },
+            }
+        },
+        components: {
+
+        },
+
+        methods: {
+            loadNextQuestion: function () {
+                //get the next question from the server
+                this.replaceQuestion();
             },
-
-            question: {
-                //the current question
-
-            },
-        },
-
-        mounted() {
-            console.log('Game Component mounted.')
-        },
-        loadNextQuestion() {
-            //get the next question from the server
-            this.replaceQuestion();
-        },
-        replaceQuestion() {
-            //replace the current question, if there is one, with the new one
-            this.data.question = {};
+            replaceQuestion: function () {
+                //replace the current question, if there is one, with the new one
+                this.data.question = {};
+            }
         }
-    }
+
+    };
 </script>
