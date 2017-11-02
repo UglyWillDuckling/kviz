@@ -16,3 +16,23 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('api')->get('/tasks', function (Request $request) {
+
+
+
+    $tasks = App\Task::latest()->get();
+
+    if ($tasks) {
+        return [
+            'success' => true,
+            'tasks' => $tasks,
+        ];
+    }
+});
+
+//Route::get('api/tasks', function () {
+//        return App\Task::latest()->get();
+////    return json_encode($tasks);
+//});
+

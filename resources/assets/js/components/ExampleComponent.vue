@@ -6,13 +6,22 @@
                     <div class="panel-heading">Example Component</div>
                     <div class="panel-body">
 
-                        <!--<ul>-->
-                            <!--<li v-for="task in tasks"-->
-                                <!--:class="{'completed' : task.completed}"-->
-                                <!--@click="task.completed = !task.completed">{{ task.body }}</li>-->
-                        <!--</ul>-->
+                        <div class="wrapper">
+                            <h3>My tasks</h3>
+                            <ul class="list-group">
+                                <li class="list-group-item" v-for="task in list">{{ task.body }}</li>
+                            </ul>
+                        </div>
 
-
+                        <alert type="success">
+                            Success! Account created. Huzzzaaahhh!!!
+                        </alert>
+                        <alert type="warning">
+                            warning
+                        </alert>
+                        <alert type="fail">
+                            You failed.
+                        </alert>
                     </div>
                 </div>
             </div>
@@ -23,21 +32,29 @@
     export default {
         data: function () {
             return {
-                tasks: [
-                    {body:  'Go to the Store',  completed: true},
-                    {body: 'Go to the Bank',    completed: false},
-                    {body: 'Go to the Doctor',  completed: false},
-                ]
+                list: []
             }
         },
-        computed: {
 
-        } ,
+        created: function () {
+            this.list = this.loadTasks();
+        },
 
         methods: {
             toggleCompletedFor: function (task) {
                 task.completed = !task.completed;
+            },
+            loadTasks: function () {
+                axios.get('api/tasks').then(function (response) {
+                    if (response.data.success && response.data.tasks) {
+                        this.list = response.data.tasks;
+                    }
+                }.bind(this));
             }
+        },
+
+        components: {
+            alert: require('./example/AlertComponent')
         }
     };
 </script>
