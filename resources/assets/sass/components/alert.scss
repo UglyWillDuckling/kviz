@@ -1,0 +1,12 @@
+.message {
+  &.success {
+    color: #1afff3;
+  }
+
+  &.fail {
+    color: magenta;
+  }
+  &.warning {
+    color: orange
+  }
+}

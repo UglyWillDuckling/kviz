@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:class="type" v-show="show">
+    <div class="message" v-bind:class="type" v-show="show">
         <slot></slot>
         <span @click="show = false">x</span>
     </div>
@@ -19,15 +19,17 @@
         }
     };
 </script>
-<style>
-    .success {
-        color: blue;
-    }
+<style lang="scss" scoped>
+    .message {
+        &.success {
+            color: #1afff3;
+        }
 
-    .fail {
-        color: magenta;
-    }
-    .warning {
-        color: orange
+        &.fail {
+            color: magenta;
+        }
+        &.warning {
+            color: orange
+        }
     }
 </style>
