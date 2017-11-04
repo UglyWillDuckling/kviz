@@ -19,6 +19,40 @@ Vue.component('game-component', require('./components/GameComponent.vue'));
 Vue.component('messagebox-component', require('./components/MessageBoxComponent.vue'));
 Vue.component('players-component', require('./components/PlayersComponent.vue'));
 
+Vue.directive('ajax', {
+    bind: function (el, binding, vnode) {
+        //alert('bound');
+        el.addEventListener('submit', binding.def.onFormSubmition.bind(binding));
+    },
+
+    unbind: function (me) {
+        alert('unbound')
+    },
+    update: function (value) {
+        alert('update')
+    },
+
+    onFormSubmition: function (e) {
+        e.preventDefault();
+        axios[this.def.getRequestType(e.currentTarget)](
+            e.currentTarget.action
+        )
+            .then(this.def.onComplete.bind(this))
+            .catch(error => {
+                this.onFail(error);
+                reject(error);
+            });;
+    },
+
+    getRequestType: function (el) {
+        var method = el.querySelector('input[name=_method]');
+        return method ? method.value.toLowerCase() : el.method.toLowerCase();
+    },
+    onComplete: function () {
+        alert('submitted the form!');
+    }
+});
+
 const app = new Vue({
     el: '#app'
 });
