@@ -39,8 +39,7 @@ Vue.directive('ajax', {
         )
             .then(this.def.onComplete.bind(this))
             .catch(error => {
-                this.onFail(error);
-                reject(error);
+                alert('an error occurred.');
             });;
     },
 
@@ -48,7 +47,7 @@ Vue.directive('ajax', {
         var method = el.querySelector('input[name=_method]');
         return method ? method.value.toLowerCase() : el.method.toLowerCase();
     },
-    onComplete: function () {
+    onComplete: function (data) {
         alert('submitted the form!');
     }
 });
