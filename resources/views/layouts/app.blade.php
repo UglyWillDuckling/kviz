@@ -71,7 +71,9 @@
             </div>
         </nav>
 
-        @yield('content')
+        <component is="home-view">
+            @yield('content')
+        </component>
     </div>
 
     <!-- Scripts -->

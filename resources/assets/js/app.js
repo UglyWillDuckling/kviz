@@ -53,5 +53,9 @@ Vue.directive('ajax', {
 });
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+
+    components: {
+        'home-view': require('./components/HomeComponent.vue')
+    }
 });
