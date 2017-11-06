@@ -1,5 +1,7 @@
 <template>
     <div class="container">
+        <link href="/css/animate.css" rel="stylesheet">
+
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
@@ -13,15 +15,29 @@
                             </ul>
                         </div>
 
-                        <alert type="success">
-                            Success! Account created. Huzzzaaahhh!!!
-                        </alert>
-                        <alert type="warning">
-                            warning
-                        </alert>
-                        <alert type="fail">
-                            You failed.
-                        </alert>
+                        <div class="wrapper">
+                            <transition
+                                name="fade"
+                                mode="out-in"
+                                enter-active-class="animated flipInX"
+                                leave-active-class="animated flipOutY"
+                            >
+                                <div v-if="showAlerts">
+                                    <alert type="success">
+                                        Success! Account created. Huzzzaaahhh!!!
+                                    </alert>
+                                    <alert type="warning">
+                                        warning
+                                    </alert>
+                                    <alert type="fail">
+                                        You failed.
+                                    </alert>
+                                </div>
+                            </transition>
+
+                            <button @click="showAlerts = !showAlerts">alert click</button>
+                        </div>
+                        <trans></trans>
                     </div>
                 </div>
             </div>
@@ -32,7 +48,8 @@
     export default {
         data: function () {
             return {
-                list: []
+                list: [],
+                showAlerts: true
             }
         },
 
@@ -54,7 +71,8 @@
         },
 
         components: {
-            alert: require('./example/AlertComponent')
+            alert: require('./example/AlertComponent'),
+            trans: require('./example/Transition.vue')
         }
     };
 </script>
