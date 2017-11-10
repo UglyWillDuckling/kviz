@@ -1,16 +1,21 @@
 <template>
     <div class="message" v-bind:class="type" v-show="show">
         <slot></slot>
-        <span @click="show = false">x</span>
+        <span class="close" @click="show = false">x</span>
     </div>
 </template>
 <script>
     export default {
-        data: function () {
+        data() {
             return {
                 types: {},
                 show: true
             }
+        },
+        mounted() {
+          setTimeout(
+            () => this.show = false
+          , 3000)
         },
 
         props: ['type'],
@@ -21,15 +26,24 @@
 </script>
 <style lang="scss" scoped>
     .message {
+        position: relative;
+        color: white;
+        font-family:sans-serif;
+        padding: 10px;
         &.success {
-            color: #1afff3;
-        }
-
+            background: #1afff3;  }
         &.fail {
-            color: magenta;
-        }
+            background: #ff32f8;  }
         &.warning {
-            color: orange
+            background: #ffae12;  }
+
+        .close {
+            position: absolute;
+            right:5px;
+            top:5px;
+            font-size: 0.75em;
+            color: white;
+            opacity:1;
         }
     }
 </style>

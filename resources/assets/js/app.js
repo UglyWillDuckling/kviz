@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -8,6 +7,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -19,41 +19,28 @@ Vue.component('game-component', require('./components/GameComponent.vue'));
 Vue.component('messagebox-component', require('./components/MessageBoxComponent.vue'));
 Vue.component('players-component', require('./components/PlayersComponent.vue'));
 
-Vue.directive('ajax', {
-    bind: function (el, binding, vnode) {
-        //alert('bound');
-        el.addEventListener('submit', binding.def.onFormSubmition.bind(binding));
-    },
+/**
+ * Import directives
+ */
+import './directives.js'
 
-    unbind: function (me) {
-        alert('unbound')
-    },
-    update: function (value) {
-        alert('update')
-    },
 
-    onFormSubmition: function (e) {
-        e.preventDefault();
-        axios[this.def.getRequestType(e.currentTarget)](
-            e.currentTarget.action
-        )
-            .then(this.def.onComplete.bind(this))
-            .catch(error => {
-                alert('an error occurred.');
-            });;
-    },
+/**
+ * Define the store
+ */
 
-    getRequestType: function (el) {
-        var method = el.querySelector('input[name=_method]');
-        return method ? method.value.toLowerCase() : el.method.toLowerCase();
-    },
-    onComplete: function (data) {
-        alert('submitted the form!');
-    }
-});
+// import StoreCommiter from 'laravel-vuex/store-commiter'
+
+let store = require('./store').default;
+let channels = ['public']
+
+// Vue.use(StoreCommiter, {channels, store})
+
 
 const app = new Vue({
     el: '#app',
+
+    store,
 
     components: {
         'home-view': require('./components/HomeComponent.vue')

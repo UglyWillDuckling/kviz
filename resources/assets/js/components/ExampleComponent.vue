@@ -38,6 +38,8 @@
                             <button @click="showAlerts = !showAlerts">alert click</button>
                         </div>
                         <trans></trans>
+
+                        <puppy></puppy>
                     </div>
                 </div>
             </div>
@@ -72,7 +74,8 @@
 
         components: {
             alert: require('./example/AlertComponent'),
-            trans: require('./example/Transition.vue')
+            trans: require('./example/Transition.vue'),
+            puppy: require('./example/Puppy.vue')
         }
     };
 </script>

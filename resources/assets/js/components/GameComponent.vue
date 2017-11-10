@@ -13,39 +13,20 @@
                 </div>
             </div>
         </div>
-    </div>
 
+        <button @click="addPlayer">add player</button>
+    </div>
 </template>
 
 <script>
     export default {
         data: function () {
             return {
-                players: [
-                    //players currently in the game
-                     {
-                        name: 'Doris',
-                        avatar: 'image',
-                        rank: '3'
-                    },
-                    {
-                        name: 'Marko',
-                        avatar: '',
-                        rank: '2'
-                    },
-                    {
-                        name: 'Zoki',
-                        avatar: '',
-                        rank: '4'
-                    },
-                ],
-
-                question: {
-                    //the current question
-
-                },
             }
         },
+//        mounted() {
+//            this.$store.default.dispatch('players/fill')
+//        },
         components: {
             score: require('./game/ScoreComponent.vue')
         },
@@ -58,8 +39,22 @@
             replaceQuestion: function () {
                 //replace the current question, if there is one, with the new one
                 this.data.question = {};
+            },
+
+            addPlayer() {
+                this.$store.commit('players/addPlayer', {
+                    name: 'vladimir'
+                });
+            }
+        },
+
+        computed: {
+            players() {
+                return this.$store.getters['players/all'];
+            },
+            question() {
+                return this.$store.getter['question'];
             }
         }
-
     };
 </script>
