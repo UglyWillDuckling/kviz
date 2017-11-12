@@ -18,6 +18,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue'))
 Vue.component('game-component', require('./components/GameComponent.vue'));
 Vue.component('messagebox-component', require('./components/MessageBoxComponent.vue'));
 Vue.component('players-component', require('./components/PlayersComponent.vue'));
+Vue.component('score-component', require('./components/ScoreComponent.vue'));
 
 /**
  * Import directives

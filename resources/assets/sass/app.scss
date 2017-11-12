@@ -8,8 +8,3 @@
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import "./components/alert.scss";
-
-p::after {
-  content: " - Remember this";
-}
-

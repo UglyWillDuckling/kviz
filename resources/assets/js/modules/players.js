@@ -1,12 +1,18 @@
 const state = {
     all: [
         {
-            name: 'player1',
-            id: 1
+            nickname: 'player1',
+            id: 1,
+            active: true,
+            correct: 0,
+            wrong: 0
         },
         {
-            name: 'player2',
-            id: 2
+            nickname: 'player2',
+            id: 2,
+            active: true,
+            correct: 0,
+            wrong: 0
         },
     ]
 }
