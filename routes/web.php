@@ -18,6 +18,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/game', 'HomeController@game')->name('game');
 
 
+Route::delete('/task/{task}', function ($task) {
+    //$task->delete();
+    return [
+        'success' => true,
+    ];
+});
 
 
 

@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -19,7 +18,32 @@ Vue.component('example-component', require('./components/ExampleComponent.vue'))
 Vue.component('game-component', require('./components/GameComponent.vue'));
 Vue.component('messagebox-component', require('./components/MessageBoxComponent.vue'));
 Vue.component('players-component', require('./components/PlayersComponent.vue'));
+Vue.component('score-component', require('./components/ScoreComponent.vue'));
+
+/**
+ * Import directives
+ */
+import './directives.js'
+
+
+/**
+ * Define the store
+ */
+
+// import StoreCommiter from 'laravel-vuex/store-commiter'
+
+let store = require('./store').default;
+let channels = ['public']
+
+// Vue.use(StoreCommiter, {channels, store})
+
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+
+    store,
+
+    components: {
+        'home-view': require('./components/HomeComponent.vue')
+    }
 });
