@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'role'
     ];
 
     /**
@@ -26,4 +26,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * checks if the user belongs to a particular group
+     * @param string|array $role
+     * @return bool
+     */
+    public function role($role) {
+        $role = (array)$role;
+        return in_array($this->role, $role);
+    }
 }
