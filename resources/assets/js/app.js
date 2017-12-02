@@ -20,6 +20,8 @@ Vue.component('messagebox-component', require('./components/MessageBoxComponent.
 Vue.component('players-component', require('./components/PlayersComponent.vue'));
 Vue.component('score-component', require('./components/ScoreComponent.vue'));
 
+Vue.component('questions-component', require('./components/admin/questions-component.vue'));
+
 /**
  * Import directives
  */

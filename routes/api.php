@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+/*
+ * test routes
+ * */
 Route::middleware('api')->get('/tasks', function (Request $request) {
-
-
 
     $tasks = App\Task::latest()->get();
 
@@ -31,8 +35,14 @@ Route::middleware('api')->get('/tasks', function (Request $request) {
     }
 });
 
-//Route::get('api/tasks', function () {
-//        return App\Task::latest()->get();
-////    return json_encode($tasks);
-//});
+Route::middleware('api')->get('/question', function (Request $request) {
 
+    $questions = App\Question::with('category')->get();
+
+    if ($questions) {
+        return [
+            'success' => true,
+            'questions' => $questions,
+        ];
+    }
+});

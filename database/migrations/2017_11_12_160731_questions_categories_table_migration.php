@@ -16,20 +16,20 @@ class QuestionsCategoriesTableMigration extends Migration
         Schema::create('question_category', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->unsignedInteger('questionId');
-            $table->unsignedInteger('categoryId');
+            $table->unsignedInteger('question_id');
+            $table->unsignedInteger('category_id');
 
-            $table->foreign('questionId')
+            $table->foreign('question_id')
                 ->references('id')->on('questions')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->foreign('categoryId')
+            $table->foreign('category_id')
                 ->references('id')->on('categories')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->index(['questionId', 'categoryId']);
+            $table->index(['question_id', 'category_id']);
 
             $table->timestamps();
         });

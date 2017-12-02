@@ -29,7 +29,10 @@ Route::delete('/task/{task}', function ($task) {
  * Admin routes
  */
 Route::middleware(['can:accessAdminpanel'])->namespace('Admin')->group(function () {
-    Route::get('/admin/dashboard', 'AdminController@index')->name('admin');
+    Route::get('/admin/dashboard', 'AdminController@index')
+        ->name('admin');
+    Route::get('/admin/questions', 'AdminController@questions')
+        ->name('admin.questionas');
 });
 
 

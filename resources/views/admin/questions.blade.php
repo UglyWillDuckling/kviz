@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Dashboard</div>
+                    <div class="panel-heading">Questions</div>
 
                     <div class="panel-body">
                         @if (session('status'))
@@ -13,9 +13,7 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                       Your are an admin
-
-                       <admin-questions-component></admin-questions-component>
+                        <questions-component :params="{{ $params }}"></questions-component>
                     </div>
                 </div>
             </div>
