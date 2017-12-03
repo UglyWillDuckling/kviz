@@ -24,7 +24,7 @@
         }
     };
 </script>
-<style scoped>
+<style lang="scss" scoped>
     .message {
         position: relative;
         color: white;

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Helper\Question as QuestionHelper;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        return  $this->app->singleton(QuestionHelper::class, function ($app) {
+            return new QuestionHelper();
+        });
     }
 }

@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,29 +19,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-/*
- * test routes
- * */
-Route::middleware('api')->get('/tasks', function (Request $request) {
+Route::middleware(['auth:api'])->namespace('Api')->group(function () {
 
-    $tasks = App\Task::latest()->get();
+    Route::get('questions', 'Question@index')->name('api.questions');
+    Route::get('question', 'Question@question')->name('api.question');
 
-    if ($tasks) {
-        return [
-            'success' => true,
-            'tasks' => $tasks,
-        ];
-    }
+
+    Route::get('categories', 'Category@index')->name('api.categories');
+    Route::get('category', 'Category@category')->name('api.category');
+
 });
 
-Route::middleware('api')->get('/question', function (Request $request) {
 
-    $questions = App\Question::with('category')->get();
+Route::middleware('api')->get('questions', 'Api\Question@index')->name('api.questions');
+Route::middleware('api')->get('question', 'Api\Question@question')->name('api.question');
 
-    if ($questions) {
-        return [
-            'success' => true,
-            'questions' => $questions,
-        ];
-    }
-});
+Route::middleware('api')->get('categories', 'Api\Category@index')->name('api.categories');
+

@@ -32,7 +32,7 @@ Route::middleware(['can:accessAdminpanel'])->namespace('Admin')->group(function 
     Route::get('/admin/dashboard', 'AdminController@index')
         ->name('admin');
     Route::get('/admin/questions', 'AdminController@questions')
-        ->name('admin.questionas');
+        ->name('admin.questions');
 });
 
 

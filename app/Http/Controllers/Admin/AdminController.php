@@ -19,7 +19,7 @@ class AdminController extends Controller
 
     public function questions(Request $request) {
         return view('admin/questions', [
-            'params' => \GuzzleHttp\json_encode($request->input())
+            'params' => \GuzzleHttp\json_encode($request->input(), JSON_FORCE_OBJECT)
         ]);
     }
 }

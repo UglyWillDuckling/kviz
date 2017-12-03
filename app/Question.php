@@ -25,6 +25,16 @@ class Question extends Model
         return $this->belongsToMany('App\Category', 'question_category');
     }
 
+    public function scopeInCategory ($query, $id) {
+        return $query->whereHas('category', function ($q) use ($id) {
+            $q->where($this->category()->getQualifiedRelatedPivotKeyName(), $id);
+        });
+    }
+
+    public function scopeStatus($q, $status){
+        return $q->where('status', $status);
+    }
+
     /**
      * defining accessors
      */
@@ -46,7 +56,8 @@ class Question extends Model
 
     public function getCategoryArrayAttribute($value)
     {
-        if (!$this->relations['category']->first()) {
+        if (!isset($this->relations['category']) ||
+            !$this->relations['category']->first()) {
             return false;
         }
         return $this->relations['category']->first()->toArray();
