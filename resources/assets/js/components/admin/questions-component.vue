@@ -121,14 +121,16 @@
 </script>
 <template>
     <div>
-        <div class="filters">
-            <div class="filter" v-for="filter in filters">
-                <h4>{{ filter.label }}</h4>
-                <component :is="filter.type" :name="filter.name" :options="filter.options"
-                           v-on:filter_chanaged="updateParams"></component>
+        <section>
+            <div class="filters">
+                <div class="filter" v-for="filter in filters">
+                    <h4>{{ filter.label }}</h4>
+                    <component :is="filter.type" :name="filter.name" :options="filter.options"
+                               v-on:filter_chanaged="updateParams"></component>
+                </div>
             </div>
-        </div>
-
+            <button @click="getQuestions" v-show="filterUpdated">apply filters</button>
+        </section>
         <ul class="questions" :class="{empty: empty}">
             <li v-for="question in questions" :key="question.id">
                 <div>
@@ -144,23 +146,30 @@
                 </div>
             </li>
         </ul>
-        <button @click="getQuestions">get</button>
     </div>
 </template>
 <style scoped lang="scss">
     * {
         text-align: center;
     }
+
+    section {
+        margin-bottom: 10px;
+    }
     
     .filters {
         display: flex;
         justify-content: space-evenly;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
     .questions  {
+        padding: 0;
         li {
             display: flex;
             margin-bottom: 10px;
+            padding: 10px 0;
+            border: 1px solid #cecccc;
+
             > div {
                 min-width: 10%;
                 text-align: center;
@@ -169,7 +178,6 @@
                     height: 100%;
                 }
             }
-
         }
     }
 </style>

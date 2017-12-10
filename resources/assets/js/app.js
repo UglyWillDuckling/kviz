@@ -21,6 +21,8 @@ Vue.component('players-component', require('./components/PlayersComponent.vue'))
 Vue.component('score-component', require('./components/ScoreComponent.vue'));
 
 Vue.component('questions-component', require('./components/admin/questions-component.vue'));
+Vue.component('question-component', require('./components/admin/question-component.vue'));
+Vue.component('answer-component', require('./components/admin/answer-component.vue'));
 
 /**
  * Import directives
