@@ -23,7 +23,7 @@ class AdminController extends Controller
     }
 
     public function question($id) {
-        if (!$question = Question::find($id)) {
+        if (!$question = Question::where('id', $id)->with('answers')->first()) {
             abort(404, 'The question you requested doesn\'t exist.');
         }
         return view('admin/question', [

@@ -21,6 +21,11 @@ class Question extends Model
     protected $appends = ['categoryArray'];
 
 
+    public function answers() {
+        return $this->hasMany('App\Answer', 'questionId');
+    }
+
+
     public function category(){
         return $this->belongsToMany('App\Category', 'question_category');
     }
