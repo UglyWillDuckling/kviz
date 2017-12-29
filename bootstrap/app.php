@@ -1,4 +1,7 @@
 <?php
+use App\Log\Handler as StreamHandler;
+use Monolog\Logger;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -51,5 +54,12 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
+
+
+$app->configureMonologUsing(function ($monolog) {
+    $monolog->pushHandler(new StreamHandler(storage_path('logs/laravel.log')), Logger::ERROR);
+});
+
+
 
 return $app;

@@ -12,10 +12,11 @@ class Question extends Model
         'video',
         'number_of_answers',
         'type_of_answer',
-        'time_limit',
         'is_multipart',
-        'enabled',
+        'time_limit',
         'approved',
+        'enabled',
+        'status'
     ];
 
     protected $appends = ['categoryArray'];

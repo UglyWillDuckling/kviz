@@ -39,6 +39,9 @@ Route::middleware(['can:accessAdminpanel'])->namespace('Admin')->group(function 
         ->name('admin.question');
     Route::get('/admin/question/create', 'AdminController@createQuestion')
         ->name('admin.question');
+
+    Route::post('/admin/question/edit', 'AdminController@editQuestion')
+        ->name('admin.question.edit.post');
 });
 
 

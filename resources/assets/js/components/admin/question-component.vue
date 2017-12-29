@@ -14,32 +14,43 @@
                     answers: [],
 
                 },
+                image: '',
+                video: '',
                 showImage: false,
                 showVideo: false,
                 answerTypes: [
                     'text',
                     'image'
                 ],
+                origAnswers: [],
                 answerNumbers: [
                     3, 4, 5
                 ],
-                minTimeLimit: 10,
+                minTimeLimit: 8,
                 maxTimeLimit: 20,
+
+                fileArray: [
+                    'image',
+                    'video'
+                ]
             }
         },
 
         mounted() {
             if (this.data) {
                 this.question = this.data
+                this.origAnswers = this.question.answers
 
                 if (this.question.image) {
                     this.showImage = true
+                    this.image = this.question.image
                 }
 
                 this.question.video = 'http://techslides.com/demos/sample-videos/small.webm'//todo delete this
 
                 if (this.question.video) {
                     this.showVideo = true
+                    this.video = this.question.video
                 }
             }
         },
@@ -48,26 +59,75 @@
 
         computed: {
             hasImage: function () {
-                return (this.question.image && this.showImage) ? true : false
+                return (this.question.image && this.showImage) ? 1 : 0
             },
             hasVideo: function () {
-                return (this.question.video && this.showVideo) ? true : false
+                return (this.question.video && this.showVideo) ? 1 : 0
             },
         },
 
         methods: {
-            updateWithFile(file, prop) {
+            saveQuestion() {
+                let data = new FormData()
+                for(var prop in this.question) {
+                    if (this.question.hasOwnProperty(prop)) {
+                        if (prop == 'answers') {
+                            data.append(prop, JSON.stringify(this.question[prop]))
+                            continue
+                        }
+                        if (_.includes(this.fileArray, prop) && !this[`has${_.capitalize(prop)}`]) {
+                            continue
+                        }
+                        data.append(prop, this.question[prop])
+                    }
+                }
+                data.append('has_video', this.hasVideo)
+                data.append('has_image', this.hasImage)
+
+                axios.post('/admin/question/edit', data)
+                    .then((response) => {
+                        if (response.success) {
+                            //redirect
+                            window.location('/admin/questions')
+                        }
+                })
+                    .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            updateAnswerType() {
+
+            },
+            updateAnswers(e) {
+                let val  = e.target.value
+                let diff = val - this.question.number_of_answers
+                if (diff > 0) {
+                    for (let i = 0; i < diff; i++) {
+                        //add new answers
+                        this.question['answers'].push({
+                            'content' : '',
+                            'type': this.question['type_of_answer']
+                        })
+                    }
+                } else if(diff < 0) {
+                    this.question['answers'].splice(diff, Math.abs(diff))
+                }
+                this.question['number_of_answers'] = val
+            },
+            updateWithFile(target) {
                 var fr = new FileReader();
                 fr.onload = () => {
-                    this.question[prop] = fr.result;
+                    this.image = fr.result
                 }
-                fr.readAsDataURL(file);
+                fr.readAsDataURL(target.files[0]);
             },
             updateImage(e) {
-                this.updateWithFile(event.target.files[0], 'image')
+                this.updateWithFile(event.target)
+                this.question['image'] = event.target.files[0];
             },
             updateVideo(e) {
-                this.updateWithFile(event.target.files[0], 'video')
+                this.updateWithFile(event.target)
+                this.question['video'] = event.target.files[0];
             },
             triggerImage(e) {
                 this.$refs.imgInput.click()
@@ -94,7 +154,7 @@
 
         <div class="options">
             <div class="overlay"></div>
-            <section>
+            <section class="body">
                 <header>
                     <h4>Question body</h4>
                 </header>
@@ -116,7 +176,7 @@
                 </header>
 
                 <div v-show="showImage">
-                    <img alt="question" :src="question.image" @click="triggerImage" v-show="hasImage">
+                    <img alt="question" :src="this.image" ref="questionImage" @click="triggerImage" v-show="hasImage">
                     <input type="file" @change="updateImage" ref="imgInput" v-show="!hasImage">
                 </div>
             </section>
@@ -135,7 +195,7 @@
                 <div v-show="showVideo">
                     <div>
                         <video alt="video question" v-show="hasVideo">
-                            <source :src="question.video">
+                            <source :src="this.video">
                         </video>
                     </div>
                     <a href="#" @click="triggerVideo">update video</a>
@@ -149,16 +209,25 @@
                 </header>
                 <div>
                     <select v-model="question['type_of_answer']">
-                        <option v-for="answerType in answerTypes" value="answerType">{{ answerType }}</option>
+                        <option v-for="answerType in answerTypes" :value="answerType">{{ answerType }}</option>
                     </select>
                 </div>
             </section>
             <section>
                 <header>
+                    <h4>Time Limit</h4>
+                </header>
+                <div>
+                    <input type="number" v-model="question.time_limit" :max="maxTimeLimit" :min="minTimeLimit">
+                </div>
+            </section>
+
+            <section>
+                <header>
                     <h4>Number of answers</h4>
                 </header>
                 <div>
-                    <select v-model="question['number_of_answers']">
+                    <select @change="updateAnswers" :value="question.number_of_answers">
                         <option v-for="n in answerNumbers" :value="n">
                             {{ n }}
                         </option>
@@ -168,22 +237,19 @@
 
             <section>
                 <header>
-                    <h4>Time Limit</h4>
-                </header>
-                <div>
-                    <input type="number" v-model="question.time_limit" :maxlength="maxTimeLimit" :minlength="minTimeLimit">
-                </div>
-            </section>
-
-            <section>
-                <header>
                     <h4>Answers</h4>
                 </header>
                 <div>
-
+                    <div v-for="answer in question.answers" class="answer">
+                        <textarea cols="20" rows="10" v-model="answer.content">
+                        </textarea>
+                    </div>
                 </div>
             </section>
 
+            <section class="save">
+               <button @click="saveQuestion">Save</button>
+            </section>
         </div>
     </div>
 </template>
@@ -229,7 +295,18 @@
         text-align: right;
     }
 
-    textarea {
+    .answer {
+        textarea {
+            width: 85%;
+            height: 85px;
+        }
+    }
+    
+    .save {
+        text-align: right;
+    }
+
+    .body  textarea {
         margin-top: 10px;
         width: 100%;
         height: 150px;

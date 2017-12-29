@@ -33,6 +33,7 @@ Route::middleware(['auth:api'])->namespace('Api')->group(function () {
 
 Route::middleware('api')->get('questions', 'Api\Question@index')->name('api.questions');
 Route::middleware('api')->get('question', 'Api\Question@question')->name('api.question');
+Route::middleware('api')->post('question', 'Api\Question@edit')->name('api.question.edit');
 
 Route::middleware('api')->get('categories', 'Api\Category@index')->name('api.categories');
 

@@ -142,7 +142,7 @@
                     {{ question.body }}
                 </div>
                 <div class="edit">
-                    <a href="#" :href="'/admin/question/' + question.id">edit</a>
+                    <a href="#" :href="'/admin/question/edit/' + question.id">edit</a>
                 </div>
             </li>
         </ul>
