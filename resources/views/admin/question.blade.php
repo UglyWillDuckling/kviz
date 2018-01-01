@@ -14,11 +14,7 @@
                             </div>
                         @endif
 
-                            @if (isset($question))
-                                <question-component :data="{{ $question }}"></question-component>
-                            @else
-                                <question-component></question-component>
-                            @endif
+                        <question-component :data="{{ json_encode($data) }}"></question-component>
                     </div>
                 </div>
             </div>

@@ -68,7 +68,12 @@ class Question
 
         DB::beginTransaction();
         try {
-            $this->updateAnswers($question, json_decode($data['answers']));
+            if (isset($data['answers'])) {
+                $this->updateAnswers($question, json_decode($data['answers']));
+            }
+            if (isset($data['categoryIds'])) {
+                $this->updateCategories($question, explode(',',$data['categoryIds']));
+            }
             $this->updateQuestionData($question, $data);
 
             $question->save();
@@ -87,6 +92,11 @@ class Question
 
     public function createQuestion($data) {
         $this->updateQuestionData(new QuestionModel(), $data);
+    }
+
+    public function updateCategories(QuestionModel $question, $categoryIds) {
+//        $question->category()->detach();
+        $question->category()->attach($categoryIds);
     }
 
     protected function updateQuestionData($question, $data) {
@@ -131,7 +141,6 @@ class Question
             if (isset($data[$hasFileString]) && !(bool)($data[$hasFileString])) {
                 $storage_path = StorageHelper::getStoragePathFromUrl($question->{$fileString});
                 if (Storage::exists($storage_path)) {
-
                     StorageHelper::copyToTemp(
                         $storage_path,
                         'public/temp/' . pathinfo($question->{$fileString}, PATHINFO_BASENAME)
@@ -154,7 +163,7 @@ class Question
         $video_path = Storage::putFile(
             'public/videos', $video
         );
-        $question->video = $video_path;
+        $question->video = Storage::url($video_path);
     }
 
 
@@ -176,18 +185,14 @@ class Question
     protected function updateAnswers(\App\Question $question, array $answersArray) {
         $question->answers()->delete();
 
-        $answers = [];
         foreach ($answersArray as $answerData){
             $answer = new \App\Answer();
 
             $answer->type = $answerData->type; //todo needs to get the actual value
             $answer->content = $answerData->content;
-
             $answer->questionId = $question->id;
 
-
             $answer->save();
-            $answers[] = $answer;
         }
     }
 }

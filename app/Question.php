@@ -19,7 +19,7 @@ class Question extends Model
         'status'
     ];
 
-    protected $appends = ['categoryArray'];
+    protected $appends = ['categoryIds'];
 
 
     public function answers() {
@@ -44,28 +44,11 @@ class Question extends Model
     /**
      * defining accessors
      */
-    public function getCategoryIdAttribute($value)
+    public function getCategoryIdsAttribute($value)
     {
-        if (!$this->relations['category']->first()) {
+        if (!isset($this->relations['category']) ||  !$this->relations['category']->first()) {
             return false;
         }
-        return $this->relations['category']->first()->id;
-    }
-
-    public function getCategoryNameAttribute($value)
-    {
-        if (!$this->relations['category']->first()) {
-            return false;
-        }
-        return $this->relations['category']->first()->name;
-    }
-
-    public function getCategoryArrayAttribute($value)
-    {
-        if (!isset($this->relations['category']) ||
-            !$this->relations['category']->first()) {
-            return false;
-        }
-        return $this->relations['category']->first()->toArray();
+        return $this->relations['category']->pluck('id')->toArray();
     }
 }

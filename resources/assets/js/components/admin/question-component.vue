@@ -32,27 +32,39 @@
                 fileArray: [
                     'image',
                     'video'
+                ],
+                categories: [
+                    {
+                        name: 'Povijest',
+                        id: 1
+                    },
+                    {
+                        name: 'Zemljopis',
+                        id: 2
+                    },
+                    {
+                        name: 'Fizika',
+                        id: 3
+                    },
                 ]
             }
         },
 
         mounted() {
-            if (this.data) {
-                this.question = this.data
-                this.origAnswers = this.question.answers
+            if (this.data.question) {
+                this.question = JSON.parse(this.data.question)
 
+                this.origAnswers = this.question.answers
                 if (this.question.image) {
                     this.showImage = true
                     this.image = this.question.image
                 }
-
-                this.question.video = 'http://techslides.com/demos/sample-videos/small.webm'//todo delete this
-
                 if (this.question.video) {
                     this.showVideo = true
                     this.video = this.question.video
                 }
             }
+            this.categories = this.data.categories
         },
 
         props: ['data'],
@@ -69,7 +81,7 @@
         methods: {
             saveQuestion() {
                 let data = new FormData()
-                for(var prop in this.question) {
+                for (var prop in this.question) {
                     if (this.question.hasOwnProperty(prop)) {
                         if (prop == 'answers') {
                             data.append(prop, JSON.stringify(this.question[prop]))
@@ -90,43 +102,44 @@
                             //redirect
                             window.location('/admin/questions')
                         }
-                })
+                    })
                     .catch(function (error) {
-                    console.log(error);
-                });
+                        console.log(error);
+                    });
             },
             updateAnswerType() {
 
             },
             updateAnswers(e) {
-                let val  = e.target.value
+                let val = e.target.value
                 let diff = val - this.question.number_of_answers
                 if (diff > 0) {
                     for (let i = 0; i < diff; i++) {
                         //add new answers
                         this.question['answers'].push({
-                            'content' : '',
+                            'content': '',
                             'type': this.question['type_of_answer']
                         })
                     }
-                } else if(diff < 0) {
+                } else if (diff < 0) {
                     this.question['answers'].splice(diff, Math.abs(diff))
                 }
                 this.question['number_of_answers'] = val
             },
-            updateWithFile(target) {
+            updateWithFile(target, fileType) {
                 var fr = new FileReader();
                 fr.onload = () => {
-                    this.image = fr.result
+                    this[fileType] = fr.result
                 }
                 fr.readAsDataURL(target.files[0]);
+                return fr;
             },
             updateImage(e) {
-                this.updateWithFile(event.target)
+                this.updateWithFile(event.target, 'image')
                 this.question['image'] = event.target.files[0];
             },
             updateVideo(e) {
-                this.updateWithFile(event.target)
+                let fr = this.updateWithFile(event.target, 'video')
                 this.question['video'] = event.target.files[0];
             },
             triggerImage(e) {
@@ -194,8 +207,7 @@
 
                 <div v-show="showVideo">
                     <div>
-                        <video alt="video question" v-show="hasVideo">
-                            <source :src="this.video">
+                        <video alt="video question" ref="questionVideo" v-show="hasVideo" controls :src="this.video">
                         </video>
                     </div>
                     <a href="#" @click="triggerVideo">update video</a>
@@ -247,8 +259,19 @@
                 </div>
             </section>
 
+            <section>
+                <header>
+                    <h4>Categories</h4>
+                </header>
+                <div>
+                    <select v-model="question.categoryIds" multiple>
+                        <option v-for="category in this.categories" :value="category.id">{{ category.name }}</option>
+                    </select>
+                </div>
+            </section>
+
             <section class="save">
-               <button @click="saveQuestion">Save</button>
+                <button @click="saveQuestion">Save</button>
             </section>
         </div>
     </div>
@@ -287,7 +310,7 @@
         display: none;
     }
 
-    img {
+    img, video {
         max-width: 100%;
     }
 
@@ -301,12 +324,12 @@
             height: 85px;
         }
     }
-    
+
     .save {
         text-align: right;
     }
 
-    .body  textarea {
+    .body textarea {
         margin-top: 10px;
         width: 100%;
         height: 150px;

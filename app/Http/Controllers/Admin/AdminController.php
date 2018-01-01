@@ -41,11 +41,17 @@ class AdminController extends Controller
 
     public function question($id)
     {
-        if (!$question = Question::where('id', $id)->with('answers')->first()) {
+        if (!$question = Question::where('id', $id)->with('answers', 'category')->first()) {
             abort(404, 'The question you requested doesn\'t exist.');
         }
+
+        $categories = \App\Category::all();
+
         return view('admin/question', [
-            'question' => \GuzzleHttp\json_encode($question->toArray())
+            'data' => [
+                'question'    => \GuzzleHttp\json_encode($question->toArray()),
+                'categories' => $categories
+            ]
         ]);
     }
 
