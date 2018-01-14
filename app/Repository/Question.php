@@ -95,7 +95,6 @@ class Question
     }
 
     public function updateCategories(QuestionModel $question, $categoryIds) {
-//        $question->category()->detach();
         $question->category()->attach($categoryIds);
     }
 

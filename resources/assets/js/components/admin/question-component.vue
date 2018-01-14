@@ -1,8 +1,10 @@
 <script>
+    var validUrl = require('valid-url');
+
     export default {
         data() {
             return {
-                question: {//get the default values some otherway todo
+                question: {
                     body: '',
                     image: '',
                     image: '',
@@ -12,6 +14,7 @@
                     'time_limit': 10,
                     'number_of_answers': 4,
                     answers: [],
+                    categoryIds: [],
 
                 },
                 image: '',
@@ -20,8 +23,7 @@
                 showVideo: false,
                 answerTypes: [
                     'text',
-                    'image'
-                ],
+                    'image'],
                 origAnswers: [],
                 answerNumbers: [
                     3, 4, 5
@@ -33,6 +35,17 @@
                     'image',
                     'video'
                 ],
+
+                fileInputs: {
+                    image: {
+                        name: 'image',
+                        showInput: false
+                    },
+                    video: {
+                        name: 'video',
+                        showInput: false
+                    }
+                },
                 categories: [
                     {
                         name: 'Povijest',
@@ -48,7 +61,8 @@
                     },
                 ]
             }
-        },
+        }
+        ,
 
         mounted() {
             if (this.data.question) {
@@ -65,7 +79,8 @@
                 }
             }
             this.categories = this.data.categories
-        },
+        }
+        ,
 
         props: ['data'],
 
@@ -106,10 +121,12 @@
                     .catch(function (error) {
                         console.log(error);
                     });
-            },
+            }
+            ,
             updateAnswerType() {
 
-            },
+            }
+            ,
             updateAnswers(e) {
                 let val = e.target.value
                 let diff = val - this.question.number_of_answers
@@ -125,29 +142,37 @@
                     this.question['answers'].splice(diff, Math.abs(diff))
                 }
                 this.question['number_of_answers'] = val
-            },
-            updateWithFile(target, fileType) {
+            }
+            ,
+            updateWithFile(file, fileType) {
                 var fr = new FileReader();
                 fr.onload = () => {
                     this[fileType] = fr.result
                 }
-                fr.readAsDataURL(target.files[0]);
+                fr.readAsDataURL(file);
                 return fr;
             },
-            updateImage(e) {
-                this.updateWithFile(event.target, 'image')
-                this.question['image'] = event.target.files[0];
+            updateInput(fileType, value) {
+                // console.log(value)
+                if (_.isObject(value)) {
+                    this.updateWithFile(value, fileType)
+                    this.question[fileType] = value
+                    return
+                }
+                if (validUrl.isUri(value)) {
+                    this.question[fileType] = value
+                    this[fileType] = value
+                    return
+                } else {
+                    alert('something is wrong with the url you submitted')
+                }
             },
-            updateVideo(e) {
-                let fr = this.updateWithFile(event.target, 'video')
-                this.question['video'] = event.target.files[0];
+
+            hideModals() {
+                _.each(this.fileInputs, function (fileInput) {
+                    fileInput.showInput = false
+                })
             },
-            triggerImage(e) {
-                this.$refs.imgInput.click()
-            },
-            triggerVideo() {
-                this.$refs.videoInput.click()
-            }
         }
     }
 </script>
@@ -189,8 +214,7 @@
                 </header>
 
                 <div v-show="showImage">
-                    <img alt="question" :src="this.image" ref="questionImage" @click="triggerImage" v-show="hasImage">
-                    <input type="file" @change="updateImage" ref="imgInput" v-show="!hasImage">
+                    <img alt="question" :src="this.image" ref="questionImage" @click="fileInputs.image.showInput = true" v-show="hasImage">
                 </div>
             </section>
 
@@ -210,8 +234,7 @@
                         <video alt="video question" ref="questionVideo" v-show="hasVideo" controls :src="this.video">
                         </video>
                     </div>
-                    <a href="#" @click="triggerVideo">update video</a>
-                    <input type="file" class="videoUpload" @change="updateVideo" ref="videoInput" v-show="!hasVideo">
+                    <a href="#" @click="fileInputs.video.showInput = true">update video</a>
                 </div>
             </section>
 
@@ -274,6 +297,14 @@
                 <button @click="saveQuestion">Save</button>
             </section>
         </div>
+
+        <button @click="fileInputs.image.showInput = true">show Image INput</button>
+        <button @click="fileInputs.video.showInput = true">show Video INput</button>
+
+        <modal-input-component
+                v-show="fileInputs[fileName].showInput" @close="hideModals()"
+                v-for="fileName in fileArray" :key="fileName" :valueName="fileName"
+                @update="updateInput"></modal-input-component>
     </div>
 </template>
 

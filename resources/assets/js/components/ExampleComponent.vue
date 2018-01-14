@@ -37,9 +37,9 @@
 
                             <button @click="showAlerts = !showAlerts">alert click</button>
                         </div>
-                        <trans></trans>
 
-                        <puppy></puppy>
+                        <button @click="showModal = true">Show Modal</button>
+                        <modal-component v-if="showModal" @close="showModal = false"></modal-component>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,8 @@
         data: function () {
             return {
                 list: [],
-                showAlerts: true
+                showAlerts: true,
+                showModal: false
             }
         },
 
