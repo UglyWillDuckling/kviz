@@ -154,6 +154,9 @@
             },
             updateInput(fileType, value) {
                 // console.log(value)
+                if (!value) {
+                    return
+                }
                 if (_.isObject(value)) {
                     this.updateWithFile(value, fileType)
                     this.question[fileType] = value
@@ -297,9 +300,6 @@
                 <button @click="saveQuestion">Save</button>
             </section>
         </div>
-
-        <button @click="fileInputs.image.showInput = true">show Image INput</button>
-        <button @click="fileInputs.video.showInput = true">show Video INput</button>
 
         <modal-input-component
                 v-show="fileInputs[fileName].showInput" @close="hideModals()"
